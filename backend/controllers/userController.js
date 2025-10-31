@@ -1,4 +1,5 @@
 const User = require('../models/User');
+const conexionMagica = require('../config/database');
 
 const userController = {
   // 👤 ACTUALIZAR PERFIL

@@ -10,7 +10,15 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// 🔮 CONEXIÓN DEFINITIVA A BASE DE DATOS
+// 📍 IMPORTAR RUTAS MODULARES
+const authRoutes = require('./routes/auth');
+const userRoutes = require('./routes/users');
+
+// 🎯 USAR RUTAS
+app.use('/api/auth', authRoutes);
+app.use('/api/users', userRoutes);
+
+// 🔮 CONEXIÓN A BASE DE DATOS
 const conexionMagica = mysql.createConnection({
   host: 'localhost',
   user: 'root',
@@ -138,139 +146,6 @@ app.get('/', (req, res) => {
   });
 });
 
-// 🌟 REGISTRO DEFINITIVO 🌟
-app.post('/registro', async (req, res) => {
-  const { nombre, email, password } = req.body;
-  
-  console.log('📝 Registrando usuario:', nombre);
-  
-  if (!nombre || !email || !password) {
-    return res.status(400).json({ error: 'Todos los campos son requeridos' });
-  }
-
-  try {
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const query = 'INSERT INTO usuarios (nombre, email, password) VALUES (?, ?, ?)';
-    
-    conexionMagica.execute(query, [nombre, email, hashedPassword], (error, results) => {
-      if (error) {
-        if (error.code === 'ER_DUP_ENTRY') {
-          return res.status(400).json({ error: 'El email ya está registrado' });
-        }
-        console.log('❌ Error en registro:', error);
-        return res.status(500).json({ error: 'Error del servidor' });
-      }
-      
-      console.log('✅ Usuario registrado ID:', results.insertId);
-      
-      res.json({
-        success: true,
-        mensaje: `¡Bienvenida ${nombre}! Tu cuenta está lista ✨`,
-        usuario: {
-          id: results.insertId,
-          nombre: nombre,
-          email: email,
-          puntos: 0,
-          nivel: 'Aprendiz'
-        }
-      });
-    });
-    
-  } catch (error) {
-    console.log('❌ Error general:', error);
-    res.status(500).json({ error: 'Error interno del servidor' });
-  }
-});
-
-// 🔑 LOGIN DEFINITIVO 🔑
-app.post('/login', async (req, res) => {
-  const { email, password } = req.body;
-  
-  console.log('🔐 Intentando login:', email);
-  
-  if (!email || !password) {
-    return res.status(400).json({ error: 'Email y contraseña requeridos' });
-  }
-
-  try {
-    const query = 'SELECT * FROM usuarios WHERE email = ?';
-    
-    conexionMagica.execute(query, [email], async (error, results) => {
-      if (error) {
-        console.log('❌ Error en login:', error);
-        return res.status(500).json({ error: 'Error del servidor' });
-      }
-      
-      if (results.length === 0) {
-        return res.status(400).json({ error: 'Usuario no encontrado' });
-      }
-      
-      const usuario = results[0];
-      const passwordValida = await bcrypt.compare(password, usuario.password);
-      
-      if (!passwordValida) {
-        return res.status(400).json({ error: 'Contraseña incorrecta' });
-      }
-
-      const token = jwt.sign(
-        { id: usuario.id, email: usuario.email }, 
-        'secreto_magico_kids_games', 
-        { expiresIn: '7d' }
-      );
-      
-      res.json({
-        success: true,
-        mensaje: '¡Login exitoso! 🎪',
-        token: token,
-        usuario: {
-          id: usuario.id,
-          nombre: usuario.nombre,
-          email: usuario.email,
-          puntos: usuario.puntos,
-          nivel: usuario.nivel
-        }
-      });
-    });
-    
-  } catch (error) {
-    console.log('❌ Error general login:', error);
-    res.status(500).json({ error: 'Error interno del servidor' });
-  }
-});
-
-// 👤 EDITAR PERFIL DEFINITIVO 👤
-app.put('/perfil', (req, res) => {
-  const { token, nuevoNombre } = req.body;
-  
-  if (!token || !nuevoNombre) {
-    return res.status(400).json({ error: 'Token y nuevo nombre requeridos' });
-  }
-
-  try {
-    const verificado = jwt.verify(token, 'secreto_magico_kids_games');
-    const query = 'UPDATE usuarios SET nombre = ? WHERE id = ?';
-    
-    conexionMagica.execute(query, [nuevoNombre, verificado.id], (error, results) => {
-      if (error) {
-        console.log('❌ Error actualizando perfil:', error);
-        return res.status(500).json({ error: 'Error al actualizar perfil' });
-      }
-      
-      res.json({
-        success: true,
-        mensaje: '¡Perfil actualizado! ✨',
-        usuario: {
-          id: verificado.id,
-          nombre: nuevoNombre
-        }
-      });
-    });
-    
-  } catch (error) {
-    res.status(401).json({ error: 'Token inválido o expirado' });
-  }
-});
-
 // 🤖 CHATBOT DEFINITIVO 🤖
 app.post('/chatbot', (req, res) => {
   const { mensaje } = req.body;
@@ -292,47 +167,12 @@ app.post('/chatbot', (req, res) => {
   };
   
   const respuesta = respuestasMagicas[mensaje.toLowerCase()] || 
-    '¡No entiendo ese hechizo! 🤔 Pregúntame: "qué es hardware", "qué es software", "cómo me registro", "qué juegos hay", "ayuda"';
+    '¡No entiendo! 🤔 Pregúntame: "qué es hardware", "qué es software", "cómo me registro", "qué juegos hay", "ayuda"';
   
   res.json({ 
     success: true,
     respuesta: respuesta 
   });
-});
-
-// 🏆 GUARDAR PUNTAJE DEFINITIVO 🏆
-app.post('/guardar-puntaje', (req, res) => {
-  const { token, juego, puntaje } = req.body;
-  
-  if (!token || !juego || !puntaje) {
-    return res.status(400).json({ error: 'Token, juego y puntaje requeridos' });
-  }
-
-  try {
-    const verificado = jwt.verify(token, 'secreto_magico_kids_games');
-    const query = 'INSERT INTO puntuaciones (usuario_id, juego, puntaje) VALUES (?, ?, ?)';
-    
-    conexionMagica.execute(query, [verificado.id, juego, puntaje], (error, results) => {
-      if (error) {
-        console.log('❌ Error guardando puntaje:', error);
-        return res.status(500).json({ error: 'Error al guardar puntaje' });
-      }
-      
-      // Actualizar puntos del usuario
-      const updateQuery = 'UPDATE usuarios SET puntos = puntos + ? WHERE id = ?';
-      conexionMagica.execute(updateQuery, [puntaje, verificado.id]);
-      
-      res.json({
-        success: true,
-        mensaje: `¡Ganaste ${puntaje} puntos mágicos! ⭐`,
-        felicitacion: 'Eres una estrella brillante 🌟',
-        nivel: puntaje > 800 ? 'Mago Maestro' : puntaje > 500 ? 'Aprendiz Avanzado' : 'Explorador'
-      });
-    });
-    
-  } catch (error) {
-    res.status(401).json({ error: 'Token inválido o expirado' });
-  }
 });
 
 // 📊 PUNTUACIONES DEFINITIVAS

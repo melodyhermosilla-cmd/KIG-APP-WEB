@@ -1,23 +1,43 @@
 // models/User.js
-const conexionMagica = require('../database');
+const conexionMagica = require('../config/database');  // Ruta CORRECTA
 
 class User {
   static async crearUsuario(nombre, email, password) {
-    const query = 'INSERT INTO usuarios (nombre, email, password) VALUES (?, ?, ?)';
     return new Promise((resolve, reject) => {
-      conexionMagica.execute(query, [nombre, email, password], (error, results) => {
-        if (error) reject(error);
-        else resolve(results);
+      console.log('👶 Intentando crear usuario:', nombre);
+      
+      const query = 'INSERT INTO usuarios (nombre, email, password) VALUES (?, ?, ?)';
+      
+      // Usamos query en lugar de execute
+      conexionMagica.query(query, [nombre, email, password], (error, results) => {
+        if (error) {
+          console.log('❌ Error en crearUsuario:', error.message);
+          reject(error);
+        } else {
+          console.log('✅ Usuario CREADO con ID:', results.insertId);
+          resolve(results);
+        }
       });
     });
   }
 
   static async buscarPorEmail(email) {
-    const query = 'SELECT * FROM usuarios WHERE email = ?';
     return new Promise((resolve, reject) => {
-      conexionMagica.execute(query, [email], (error, results) => {
-        if (error) reject(error);
-        else resolve(results[0]);
+      console.log('🔍 Buscando usuario con email:', email);
+      
+      const query = 'SELECT * FROM usuarios WHERE email = ?';
+      
+      conexionMagica.query(query, [email], (error, results) => {
+        if (error) {
+          console.log('❌ Error en buscarPorEmail:', error.message);
+          reject(error);
+        } else if (results.length === 0) {
+          console.log('👻 Usuario no encontrado');
+          resolve(null);
+        } else {
+          console.log('✅ Usuario encontrado:', results[0].nombre);
+          resolve(results[0]);
+        }
       });
     });
   }
