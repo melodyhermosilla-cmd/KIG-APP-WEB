@@ -49,3 +49,211 @@
   font-size: 1.1rem;
   margin-bottom: 0.5rem;
 }
+
+.cargando-mis-juegos,
+.no-usuario,
+.sin-puntuaciones {
+  text-align: center;
+  padding: 3rem;
+  background: #f8f9fa;
+  border-radius: 10px;
+  margin: 2rem 0;
+}
+
+.cargando-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.login-btn-misjuegos {
+  background: #6f42c1;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 1rem;
+  font-size: 1rem;
+}
+
+.login-btn-misjuegos:hover {
+  background: #5a32a3;
+}
+
+.estadisticas-usuario {
+  margin: 2rem 0;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.stat-card-misjuegos {
+  background: white;
+  border: 2px solid #e9ecef;
+  border-radius: 10px;
+  padding: 1.5rem;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.stat-icon {
+  font-size: 2rem;
+}
+
+.stat-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.stat-number {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #6f42c1;
+}
+
+.stat-text {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #6f42c1;
+}
+
+.stat-label {
+  color: #6c757d;
+  font-size: 0.9rem;
+}
+
+.mis-puntuaciones {
+  margin: 2rem 0;
+}
+
+.puntuaciones-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.puntaje-item {
+  background: white;
+  border: 2px solid #e9ecef;
+  border-radius: 10px;
+  padding: 1rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: transform 0.2s;
+}
+
+.puntaje-item:hover {
+  transform: translateY(-2px);
+  border-color: #6f42c1;
+}
+
+.puntaje-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.juego-nombre {
+  font-weight: bold;
+  color: #495057;
+}
+
+.puntaje-fecha {
+  color: #6c757d;
+  font-size: 0.8rem;
+}
+
+.puntaje-valor {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.puntos {
+  font-weight: bold;
+  color: #6f42c1;
+  font-size: 1.1rem;
+}
+
+.jugar-otra-vez-btn {
+  background: #6f42c1;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.8rem;
+}
+
+.jugar-otra-vez-btn:hover {
+  background: #5a32a3;
+}
+
+.todos-juegos {
+  margin: 2rem 0;
+}
+
+.juegos-grid-misjuegos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.juego-card-misjuegos {
+  background: white;
+  border: 2px solid #e9ecef;
+  border-radius: 10px;
+  padding: 1.5rem;
+  transition: all 0.3s;
+}
+
+.juego-card-misjuegos:hover {
+  transform: translateY(-5px);
+  border-color: #6f42c1;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.juego-header-misjuegos {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.juego-icono-misjuegos {
+  font-size: 1.5rem;
+}
+
+.juego-card-misjuegos h4 {
+  margin: 0;
+  color: #6f42c1;
+}
+
+.juego-desc-misjuegos {
+  color: #6c757d;
+  margin-bottom: 1rem;
+  line-height: 1.5;
+}
+
+.jugar-btn-misjuegos {
+  background: #6f42c1;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 100%;
+  transition: background 0.3s;
+}
+
+.jugar-btn-misjuegos:hover {
+  background: #5a32a3;
+}

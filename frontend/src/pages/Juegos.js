@@ -1,56 +1,113 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { juegosAPI } from '../services/api';
 import './Juegos.css';
 
-function Juegos({ onTematicaSelect }) {
-  const tematicas = [
-    {
-      id: 'hardware',
-      nombre: 'HARDWARE',
-      icono: '💻',
-      descripcion: 'Juegos sobre componentes físicos de computadoras',
-      color: '#0f3460'
-    },
-    {
-      id: 'software', 
-      nombre: 'SOFTWARE',
-      icono: '📱',
-      descripcion: 'Juegos sobre programas y sistemas operativos',
-      color: '#533483'
+function Juegos() {
+  const [juegos, setJuegos] = useState({ hardware: [], software: [] });
+  const [cargando, setCargando] = useState(true);
+
+  useEffect(() => {
+    cargarJuegos();
+  }, []);
+
+  const cargarJuegos = async () => {
+    try {
+      const data = await juegosAPI.obtenerJuegos();
+      setJuegos(data.juegos);
+    } catch (error) {
+      console.error('Error cargando juegos:', error);
+      // ✅ DATOS DE RESPUESTA POR SI FALLA LA CONEXIÓN
+      setJuegos({
+        hardware: [
+          { 
+            id: 1, 
+            nombre: 'Sopa de Letras - Componentes', 
+            tipo: 'sopa-letras', 
+            icono: '🔍', 
+            descripcion: 'Encuentra palabras de hardware' 
+          },
+          { 
+            id: 2, 
+            nombre: 'Rompecabezas - Placa Base', 
+            tipo: 'rompecabezas', 
+            icono: '🧩', 
+            descripcion: 'Arma la placa madre' 
+          },
+          { 
+            id: 3, 
+            nombre: 'Quiz - Hardware Básico', 
+            tipo: 'quiz', 
+            icono: '❓', 
+            descripcion: 'Preguntas sobre componentes' 
+          }
+        ],
+        software: [
+          { 
+            id: 4, 
+            nombre: 'Memoria - Iconos', 
+            tipo: 'memoria', 
+            icono: '🎮', 
+            descripcion: 'Encuentra los pares de programas' 
+          },
+          { 
+            id: 5, 
+            nombre: 'Ahorcado - Programas', 
+            tipo: 'ahorcado', 
+            icono: '🎯', 
+            descripcion: 'Adivina nombres de software' 
+          },
+          { 
+            id: 6, 
+            nombre: 'Crucigrama - Sistemas', 
+            tipo: 'crucigrama', 
+            icono: '🧩', 
+            descripcion: 'Completa el crucigrama' 
+          }
+        ]
+      });
+    } finally {
+      setCargando(false);
     }
-  ];
+  };
+
+  if (cargando) return <div className="cargando">Cargando juegos... 🎮</div>;
 
   return (
-    <section id="juegos" className="section active">
-      <div className="juegos-container">
-        <div className="juegos-header">
-          <h2>🎮 JUEGOS</h2>
-          <p>Selecciona una temática para empezar a jugar</p>
-        </div>
-        
-        <div className="tematicas-grid">
-          {tematicas.map(tematica => (
-            <div 
-              key={tematica.id}
-              className="tematica-card"
-              onClick={() => onTematicaSelect(tematica.id)}
-              style={{ '--card-color': tematica.color }}
-            >
-              <div className="tematica-icon">{tematica.icono}</div>
-              <h3>{tematica.nombre}</h3>
-              <p>{tematica.descripcion}</p>
-              <div className="tematica-arrow">→</div>
+    <div className="juegos-page">
+      <h1>🎮 Nuestros Juegos Educativos</h1>
+      
+      <section className="categoria">
+        <h2>🖥️ Juegos de Hardware</h2>
+        <div className="juegos-grid">
+          {juegos.hardware.map(juego => (
+            <div key={juego.id} className="juego-card">
+              <div className="juego-header">
+                <span className="juego-icono">{juego.icono}</span>
+                <h3>{juego.nombre}</h3>
+              </div>
+              <p className="juego-descripcion">{juego.descripcion}</p>
+              <span className="juego-tipo">{juego.tipo}</span>
             </div>
           ))}
         </div>
+      </section>
 
-        <div className="juegos-info">
-          <div className="info-card">
-            <h4>🚀 ¿Cómo jugar?</h4>
-            <p>Selecciona una temática, elige un juego y diviértete aprendiendo informática</p>
-          </div>
+      <section className="categoria">
+        <h2>💾 Juegos de Software</h2>
+        <div className="juegos-grid">
+          {juegos.software.map(juego => (
+            <div key={juego.id} className="juego-card">
+              <div className="juego-header">
+                <span className="juego-icono">{juego.icono}</span>
+                <h3>{juego.nombre}</h3>
+              </div>
+              <p className="juego-descripcion">{juego.descripcion}</p>
+              <span className="juego-tipo">{juego.tipo}</span>
+            </div>
+          ))}
         </div>
-      </div>
-    </section>
+      </section>
+    </div>
   );
 }
 

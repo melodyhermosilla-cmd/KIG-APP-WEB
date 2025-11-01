@@ -1,74 +1,115 @@
 import React, { useState, useEffect } from 'react';
+import { juegosAPI } from '../services/api';
 import './Software.css';
 
 function Software({ onBack }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
+  const [juegos, setJuegos] = useState([]);
+  const [cargando, setCargando] = useState(true);
 
-  const juegos = [
-    {
-      id: 1,
-      nombre: "Sopa de Letras - Programas",
-      descripcion: "Encuentra nombres de programas y aplicaciones en esta sopa de letras",
-      icono: "🔍",
-      enlace: "/juegos-software/softsopa/softsopa.html"
-    },
-    {
-      id: 2,
-      nombre: "Crucigrama - Sistemas Operativos", 
-      descripcion: "Completa el crucigrama sobre sistemas operativos y software",
-      icono: "🧩",
-      enlace: "/juegos-software/softcrucigrama/softcrucigrama.html"
-    },
-    {
-      id: 3,
-      nombre: "Quiz - Software Aplicativo",
-      descripcion: "Responde preguntas sobre diferentes tipos de software",
-      icono: "❓",
-      enlace: "/juegos-software/pregsoft/preguntasyrespuestas_software.html"
-    },
-    {
-      id: 4,
-      nombre: "Rompecabezas - Interfaz Gráfica",
-      descripcion: "Arma el rompecabezas de una interfaz gráfica de usuario",
-      icono: "🧩",
-      enlace: "/juegos-software/rompsoft/puzzle_software.html"
-    },
-    {
-      id: 5,
-      nombre: "Memoria - Iconos de Programas",
-      descripcion: "Encuentra las parejas de iconos de programas famosos",
-      icono: "🎮",
-      enlace: "/juegos-software/softmemorama/softmemorama.html"
-    },
-    {
-      id: 6,
-      nombre: "Ahorcado - Programas", 
-      descripcion: "Adivina los nombres de programas antes de que se complete el ahorcado",
-      icono: "🎯",
-      enlace: "/juegos-software/softahorcado/softahorcado.html"
+  // ✅ CARGAR JUEGOS DESDE EL BACKEND
+  useEffect(() => {
+    cargarJuegosSoftware();
+  }, []);
+
+  const cargarJuegosSoftware = async () => {
+    try {
+      const data = await juegosAPI.obtenerJuegos();
+      // Filtrar solo juegos de software y agregar enlaces
+      const juegosSoftware = data.juegos.software.map(juego => ({
+        ...juego,
+        enlace: obtenerEnlaceJuego(juego.nombre)
+      }));
+      setJuegos(juegosSoftware);
+    } catch (error) {
+      console.error('Error cargando juegos de software:', error);
+      // ✅ DATOS DE RESPUESTA POR SI FALLA LA CONEXIÓN
+      const juegosRespaldo = [
+        {
+          id: 1,
+          nombre: "Sopa de Letras - Programas",
+          descripcion: "Encuentra nombres de programas y aplicaciones en esta sopa de letras",
+          icono: "🔍",
+          tipo: "sopa-letras",
+          enlace: "/juegos-software/softsopa/softsopa.html"
+        },
+        {
+          id: 2,
+          nombre: "Crucigrama - Sistemas Operativos", 
+          descripcion: "Completa el crucigrama sobre sistemas operativos y software",
+          icono: "🧩",
+          tipo: "crucigrama",
+          enlace: "/juegos-software/softcrucigrama/softcrucigrama.html"
+        },
+        {
+          id: 3,
+          nombre: "Quiz - Software Aplicativo",
+          descripcion: "Responde preguntas sobre diferentes tipos de software",
+          icono: "❓",
+          tipo: "quiz",
+          enlace: "/juegos-software/pregsoft/preguntasyrespuestas_software.html"
+        },
+        {
+          id: 4,
+          nombre: "Rompecabezas - Interfaz Gráfica",
+          descripcion: "Arma el rompecabezas de una interfaz gráfica de usuario",
+          icono: "🧩",
+          tipo: "rompecabezas",
+          enlace: "/juegos-software/rompsoft/puzzle_software.html"
+        },
+        {
+          id: 5,
+          nombre: "Memoria - Iconos de Programas",
+          descripcion: "Encuentra las parejas de iconos de programas famosos",
+          icono: "🎮",
+          tipo: "memoria",
+          enlace: "/juegos-software/softmemorama/softmemorama.html"
+        },
+        {
+          id: 6,
+          nombre: "Ahorcado - Programas", 
+          descripcion: "Adivina los nombres de programas antes de que se complete el ahorcado",
+          icono: "🎯",
+          tipo: "ahorcado",
+          enlace: "/juegos-software/softahorcado/softahorcado.html"
+        }
+      ];
+      setJuegos(juegosRespaldo);
+    } finally {
+      setCargando(false);
     }
-  ];
+  };
 
-  // 🔄 TODO EL RESTO DEL CÓDIGO ES EXACTAMENTE IGUAL
-  // Solo copia y pega desde aquí...
+  // ✅ FUNCIÓN PARA OBTENER ENLACE SEGÚN EL NOMBRE DEL JUEGO
+  const obtenerEnlaceJuego = (nombreJuego) => {
+    const enlaces = {
+      'Sopa de Letras - Programas': '/juegos-software/softsopa/softsopa.html',
+      'Crucigrama - Sistemas Operativos': '/juegos-software/softcrucigrama/softcrucigrama.html',
+      'Quiz - Software Aplicativo': '/juegos-software/pregsoft/preguntasyrespuestas_software.html',
+      'Rompecabezas - Interfaz Gráfica': '/juegos-software/rompsoft/puzzle_software.html',
+      'Memoria - Iconos de Programas': '/juegos-software/softmemorama/softmemorama.html',
+      'Ahorcado - Programas': '/juegos-software/softahorcado/softahorcado.html'
+    };
+    return enlaces[nombreJuego] || '#';
+  };
 
-  // Navegación suave del carrusel
+  // ✅ NAVEGACIÓN DEL CARRUSEL (MISMO CÓDIGO)
   const nextGame = () => {
-    if (isAnimating) return;
+    if (isAnimating || juegos.length === 0) return;
     setIsAnimating(true);
     setCurrentIndex((prev) => (prev + 1) % juegos.length);
     setTimeout(() => setIsAnimating(false), 500);
   };
 
   const prevGame = () => {
-    if (isAnimating) return;
+    if (isAnimating || juegos.length === 0) return;
     setIsAnimating(true);
     setCurrentIndex((prev) => (prev - 1 + juegos.length) % juegos.length);
     setTimeout(() => setIsAnimating(false), 500);
   };
 
-  // Navegación con teclado
+  // ✅ NAVEGACIÓN CON TECLADO
   useEffect(() => {
     const handleKeyPress = (e) => {
       if (e.key === 'ArrowLeft') prevGame();
@@ -77,15 +118,18 @@ function Software({ onBack }) {
 
     window.addEventListener('keydown', handleKeyPress);
     return () => window.removeEventListener('keydown', handleKeyPress);
-  }, [isAnimating]);
+  }, [isAnimating, juegos.length]);
 
+  // ✅ ABRIR JUEGO
   const abrirJuego = (enlace) => {
-  // Abrir en nueva pestaña de forma forzada
-  const newWindow = window.open('', '_blank');
-  newWindow.location.href = enlace;
-};
-  // Sistema de posiciones del carrusel
+    const newWindow = window.open('', '_blank');
+    newWindow.location.href = enlace;
+  };
+
+  // ✅ SISTEMA DE POSICIONES DEL CARRUSEL
   const getVisibleGames = () => {
+    if (juegos.length === 0) return [];
+    
     const total = juegos.length;
     const games = [];
     
@@ -103,6 +147,17 @@ function Software({ onBack }) {
     
     return games;
   };
+
+  if (cargando) {
+    return (
+      <section id="software" className="section active">
+        <div className="cargando-software">
+          <h2>📱 SOFTWARE</h2>
+          <p>Cargando juegos de software... 💾</p>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section id="software" className="section active">

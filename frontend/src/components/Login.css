@@ -1,0 +1,111 @@
+.login-container {
+  position: relative;
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 2rem;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.login-close-btn {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #666;
+}
+
+.login-close-btn:hover {
+  color: #333;
+}
+
+.login-container h2 {
+  text-align: center;
+  color: #6f42c1;
+  margin-bottom: 1.5rem;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.login-input {
+  padding: 12px;
+  border: 2px solid #e9ecef;
+  border-radius: 5px;
+  font-size: 1rem;
+  transition: border-color 0.3s;
+}
+
+.login-input:focus {
+  outline: none;
+  border-color: #6f42c1;
+}
+
+.login-submit-btn {
+  padding: 12px;
+  background: #6f42c1;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.login-submit-btn:hover:not(:disabled) {
+  background: #5a32a3;
+}
+
+.login-submit-btn:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+.login-switch {
+  text-align: center;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e9ecef;
+}
+
+.switch-mode-btn {
+  background: none;
+  border: none;
+  color: #6f42c1;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.switch-mode-btn:hover {
+  color: #5a32a3;
+}
+
+.demo-accounts {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  background: #f8f9fa;
+  border-radius: 5px;
+  font-size: 0.9rem;
+}
+
+.demo-accounts h4 {
+  margin: 0 0 0.5rem 0;
+  color: #495057;
+}
+
+.demo-accounts p {
+  margin: 0.2rem 0;
+  color: #6c757d;
+}

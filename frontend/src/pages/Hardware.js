@@ -1,71 +1,115 @@
 import React, { useState, useEffect } from 'react';
+import { juegosAPI } from '../services/api';
 import './Hardware.css';
 
 function Hardware({ onBack }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
+  const [juegos, setJuegos] = useState([]);
+  const [cargando, setCargando] = useState(true);
 
-  const juegos = [
-    {
-      id: 1,
-      nombre: "Sopa de Letras - Componentes",
-      descripcion: "Encuentra los componentes de hardware en esta sopa de letras divertida",
-      icono: "🔍",
-      enlace: "/juegos-hardware/sopa/sopa.html"
-    },
-    {
-      id: 2,
-      nombre: "Crucigrama - Partes de PC", 
-      descripcion: "Completa el crucigrama con las partes de una computadora",
-      icono: "🧩",
-      enlace: "/juegos-hardware/crucigrama/crucigrama.html"
-    },
-    {
-  id: 3,
-  nombre: "Quiz - Hardware Básico",
-  descripcion: "Responde preguntas sobre componentes básicos de hardware",
-  icono: "❓",
-  enlace: "/juegos-hardware/preg/index.html"  // ← Ruta directa al HTML
-   },
-    {
-      id: 4,
-      nombre: "Rompecabezas - Placa Base",
-      descripcion: "Arma el rompecabezas de una placa base y sus componentes",
-      icono: "🧩",
-      enlace: "/juegos-hardware/rompecabezas/puzzle_ramycpu.html"
-    },
-    {
-      id: 5,
-      nombre: "Memoria - Periféricos",
-      descripcion: "Encuentra las parejas de periféricos de entrada y salida",
-      icono: "🎮",
-      enlace: "/juegos-hardware/memorama/memorama.html"
-    },
-    {
-      id: 6,
-      nombre: "Ahorcado - Componentes", 
-      descripcion: "Adivina los componentes de hardware antes de que se complete el ahorcado",
-      icono: "🎯",
-      enlace: "/juegos-hardware/ahorcado/ahorcado.html"
+  // ✅ CARGAR JUEGOS DESDE EL BACKEND
+  useEffect(() => {
+    cargarJuegosHardware();
+  }, []);
+
+  const cargarJuegosHardware = async () => {
+    try {
+      const data = await juegosAPI.obtenerJuegos();
+      // Filtrar solo juegos de hardware y agregar enlaces
+      const juegosHardware = data.juegos.hardware.map(juego => ({
+        ...juego,
+        enlace: obtenerEnlaceJuego(juego.nombre)
+      }));
+      setJuegos(juegosHardware);
+    } catch (error) {
+      console.error('Error cargando juegos de hardware:', error);
+      // ✅ DATOS DE RESPUESTA POR SI FALLA LA CONEXIÓN
+      const juegosRespaldo = [
+        {
+          id: 1,
+          nombre: "Sopa de Letras - Componentes",
+          descripcion: "Encuentra los componentes de hardware en esta sopa de letras divertida",
+          icono: "🔍",
+          tipo: "sopa-letras",
+          enlace: "/juegos-hardware/sopa/sopa.html"
+        },
+        {
+          id: 2,
+          nombre: "Crucigrama - Partes de PC", 
+          descripcion: "Completa el crucigrama con las partes de una computadora",
+          icono: "🧩",
+          tipo: "crucigrama",
+          enlace: "/juegos-hardware/crucigrama/crucigrama.html"
+        },
+        {
+          id: 3,
+          nombre: "Quiz - Hardware Básico",
+          descripcion: "Responde preguntas sobre componentes básicos de hardware",
+          icono: "❓",
+          tipo: "quiz",
+          enlace: "/juegos-hardware/preg/index.html"
+        },
+        {
+          id: 4,
+          nombre: "Rompecabezas - Placa Base",
+          descripcion: "Arma el rompecabezas de una placa base y sus componentes",
+          icono: "🧩",
+          tipo: "rompecabezas",
+          enlace: "/juegos-hardware/rompecabezas/puzzle_ramycpu.html"
+        },
+        {
+          id: 5,
+          nombre: "Memoria - Periféricos",
+          descripcion: "Encuentra las parejas de periféricos de entrada y salida",
+          icono: "🎮",
+          tipo: "memoria",
+          enlace: "/juegos-hardware/memorama/memorama.html"
+        },
+        {
+          id: 6,
+          nombre: "Ahorcado - Componentes", 
+          descripcion: "Adivina los componentes de hardware antes de que se complete el ahorcado",
+          icono: "🎯",
+          tipo: "ahorcado",
+          enlace: "/juegos-hardware/ahorcado/ahorcado.html"
+        }
+      ];
+      setJuegos(juegosRespaldo);
+    } finally {
+      setCargando(false);
     }
-  ];
+  };
 
-  // Navegación suave del carrusel
+  // ✅ FUNCIÓN PARA OBTENER ENLACE SEGÚN EL NOMBRE DEL JUEGO
+  const obtenerEnlaceJuego = (nombreJuego) => {
+    const enlaces = {
+      'Sopa de Letras - Componentes': '/juegos-hardware/sopa/sopa.html',
+      'Crucigrama - Partes de PC': '/juegos-hardware/crucigrama/crucigrama.html',
+      'Quiz - Hardware Básico': '/juegos-hardware/preg/index.html',
+      'Rompecabezas - Placa Base': '/juegos-hardware/rompecabezas/puzzle_ramycpu.html',
+      'Memoria - Periféricos': '/juegos-hardware/memorama/memorama.html',
+      'Ahorcado - Componentes': '/juegos-hardware/ahorcado/ahorcado.html'
+    };
+    return enlaces[nombreJuego] || '#';
+  };
+
+  // ✅ NAVEGACIÓN DEL CARRUSEL (MISMO CÓDIGO)
   const nextGame = () => {
-    if (isAnimating) return;
+    if (isAnimating || juegos.length === 0) return;
     setIsAnimating(true);
     setCurrentIndex((prev) => (prev + 1) % juegos.length);
     setTimeout(() => setIsAnimating(false), 500);
   };
 
   const prevGame = () => {
-    if (isAnimating) return;
+    if (isAnimating || juegos.length === 0) return;
     setIsAnimating(true);
     setCurrentIndex((prev) => (prev - 1 + juegos.length) % juegos.length);
     setTimeout(() => setIsAnimating(false), 500);
   };
 
-  // Navegación con teclado
+  // ✅ NAVEGACIÓN CON TECLADO
   useEffect(() => {
     const handleKeyPress = (e) => {
       if (e.key === 'ArrowLeft') prevGame();
@@ -74,16 +118,18 @@ function Hardware({ onBack }) {
 
     window.addEventListener('keydown', handleKeyPress);
     return () => window.removeEventListener('keydown', handleKeyPress);
-  }, [isAnimating]);
+  }, [isAnimating, juegos.length]);
 
-// ✅ OPCIÓN MÁS SEGURA:
-const abrirJuego = (enlace) => {
-  // Abrir en nueva pestaña de forma forzada
-  const newWindow = window.open('', '_blank');
-  newWindow.location.href = enlace;
-};
-  // Sistema de posiciones del carrusel
+  // ✅ ABRIR JUEGO
+  const abrirJuego = (enlace) => {
+    const newWindow = window.open('', '_blank');
+    newWindow.location.href = enlace;
+  };
+
+  // ✅ SISTEMA DE POSICIONES DEL CARRUSEL
   const getVisibleGames = () => {
+    if (juegos.length === 0) return [];
+    
     const total = juegos.length;
     const games = [];
     
@@ -101,6 +147,17 @@ const abrirJuego = (enlace) => {
     
     return games;
   };
+
+  if (cargando) {
+    return (
+      <section id="hardware" className="section active">
+        <div className="cargando-hardware">
+          <h2>💻 HARDWARE</h2>
+          <p>Cargando juegos de hardware... 🖥️</p>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section id="hardware" className="section active">
