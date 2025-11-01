@@ -1,0 +1,1849 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kids Informatic Games</title>
+    <!-- Fuentes para el diseño robótico -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* ESTILOS GLOBALES - Puedes cambiar colores y fuentes aquí */
+        :root {
+            --color-primario: #1a1a2e; /* Color principal de fondo */
+            --color-secundario: #16213e; /* Color secundario */
+            --color-accento: #0f3460; /* Color de acento */
+            --color-destacado: #e94560; /* Color destacado para botones y elementos importantes */
+            --color-texto: #ffffff; /* Color del texto principal */
+            --color-texto-secundario: #b8b8b8; /* Color del texto secundario */
+            --fuente-principal: 'Orbitron', sans-serif; /* Fuente principal robótica */
+            --fuente-secundaria: 'Rajdhani', sans-serif; /* Fuente secundaria */
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--fuente-secundaria);
+            background-color: var(--color-primario);
+            color: var(--color-texto);
+            line-height: 1.6;
+            overflow-x: hidden;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: var(--fuente-principal);
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        /* ESTILOS DEL ENCABEZADO Y MENÚ */
+        header {
+            background-color: var(--color-secundario);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            border-bottom: 2px solid var(--color-destacado);
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-icon {
+            font-size: 2rem;
+            color: var(--color-destacado);
+        }
+
+        .logo h1 {
+            font-size: 1.8rem;
+            background: linear-gradient(90deg, #00dbde, #fc00ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-transform: uppercase;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        nav a {
+            color: var(--color-texto);
+            text-decoration: none;
+            font-family: var(--fuente-principal);
+            font-weight: 500;
+            font-size: 1.1rem;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        nav a:hover {
+            background-color: var(--color-accento);
+            color: var(--color-destacado);
+        }
+
+        nav a.active {
+            color: var(--color-destacado);
+            border-bottom: 2px solid var(--color-destacado);
+        }
+
+        .user-menu {
+            position: relative;
+        }
+
+        .user-btn {
+            background: var(--color-accento);
+            border: none;
+            color: var(--color-texto);
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-family: var(--fuente-principal);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .user-btn:hover {
+            background: var(--color-destacado);
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: var(--color-secundario);
+            border: 1px solid var(--color-accento);
+            border-radius: 4px;
+            padding: 0.5rem 0;
+            min-width: 200px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            display: none;
+            z-index: 1001;
+        }
+
+        .dropdown-menu.show {
+            display: block;
+        }
+
+        .dropdown-menu a {
+            display: block;
+            padding: 0.75rem 1rem;
+            color: var(--color-texto);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .dropdown-menu a:hover {
+            background: var(--color-accento);
+            color: var(--color-destacado);
+        }
+
+        /* ESTILOS DE LAS SECCIONES */
+        .section {
+            display: none;
+            flex: 1;
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        /* ESTILOS DE LA SECCIÓN INICIO - OCUPANDO TODA LA PÁGINA */
+        #inicio {
+            padding: 0;
+            max-width: none;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 8rem 2rem;
+            background: linear-gradient(135deg, var(--color-secundario) 0%, var(--color-primario) 100%);
+            position: relative;
+            overflow: hidden;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .hero::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0,0 L100,0 L100,100 Z" fill="rgba(233,69,96,0.1)"/></svg>');
+            background-size: cover;
+            z-index: 0;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+        }
+
+        .hero h2 {
+            font-size: 4.5rem;
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: 1.8rem;
+            margin-bottom: 3rem;
+            color: var(--color-texto-secundario);
+        }
+
+        .cta-button {
+            background: var(--color-destacado);
+            color: white;
+            border: none;
+            padding: 1.2rem 3rem;
+            font-size: 1.5rem;
+            font-family: var(--fuente-principal);
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 2rem;
+        }
+
+        .cta-button:hover {
+            background: #ff2e4f;
+            transform: translateY(-5px);
+            box-shadow: 0 15px 25px rgba(233, 69, 96, 0.4);
+        }
+
+        /* ESTILOS DE LA SECCIÓN INTRODUCCIÓN - SOLO TEXTO */
+        .intro-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        .intro-text {
+            background: var(--color-secundario);
+            padding: 3rem;
+            border-radius: 12px;
+            border-left: 6px solid var(--color-destacado);
+            max-width: 900px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .intro-text h3 {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            color: var(--color-destacado);
+        }
+
+        .intro-text p {
+            font-size: 1.3rem;
+            line-height: 1.8;
+        }
+
+        /* ESTILOS DE LA SECCIÓN JUEGOS - SOLO TEMÁTICAS */
+        .tematicas {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .tematica-card {
+            background: var(--color-secundario);
+            border-radius: 12px;
+            padding: 2.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .tematica-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--color-destacado);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .tematica-icon {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .tematica-card h3 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: var(--color-destacado);
+        }
+
+        .tematica-card p {
+            color: var(--color-texto-secundario);
+            font-size: 1.1rem;
+        }
+
+        /* ESTILOS DE LAS PÁGINAS DE TEMÁTICAS INDIVIDUALES */
+        .tematica-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2rem;
+            background: var(--color-secundario);
+            border-radius: 12px;
+            border-bottom: 4px solid var(--color-destacado);
+        }
+
+        .tematica-header h2 {
+            font-size: 3rem;
+            color: var(--color-destacado);
+            margin-bottom: 1rem;
+        }
+
+        .tematica-header p {
+            font-size: 1.3rem;
+            color: var(--color-texto-secundario);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* CARRUSEL DE JUEGOS ROTATORIOS */
+        .juegos-carrusel {
+            position: relative;
+            width: 100%;
+            height: 500px;
+            margin: 3rem auto;
+            perspective: 1000px;
+        }
+
+        .carrusel-container {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.8s ease;
+        }
+
+        .carrusel-juego {
+            position: absolute;
+            width: 320px;
+            height: 420px;
+            background: var(--color-secundario);
+            border-radius: 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem;
+            text-align: center;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+            transition: transform 0.5s ease, opacity 0.5s ease;
+            border: 3px solid var(--color-destacado);
+            backface-visibility: hidden;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .carrusel-juego.active {
+            transform: translateX(-50%) translateZ(0);
+            opacity: 1;
+            z-index: 3;
+        }
+
+        .carrusel-juego.prev {
+            transform: translateX(-150%) rotateY(10deg);
+            opacity: 0.7;
+            z-index: 2;
+        }
+
+        .carrusel-juego.next {
+            transform: translateX(50%) rotateY(-10deg);
+            opacity: 0.7;
+            z-index: 2;
+        }
+
+        .carrusel-juego.hidden {
+            opacity: 0;
+            transform: translateX(-50%) translateZ(-200px);
+            z-index: 1;
+        }
+
+        .juego-icon {
+            font-size: 5rem;
+            margin-bottom: 2rem;
+        }
+
+        .carrusel-juego h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            color: var(--color-destacado);
+        }
+
+        .carrusel-juego p {
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            color: var(--color-texto-secundario);
+        }
+
+        .carrusel-controls {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .carrusel-btn {
+            background: var(--color-accento);
+            color: white;
+            border: none;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .carrusel-btn:hover {
+            background: var(--color-destacado);
+            transform: scale(1.1);
+        }
+
+        /* LISTA DE JUEGOS (PARA TEMÁTICAS QUE NO SON HARDWARE) */
+        .juegos-lista {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .juego-card {
+            background: var(--color-secundario);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .juego-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--color-destacado);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .juego-img {
+            height: 180px;
+            background: var(--color-accento);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+        }
+
+        .juego-info {
+            padding: 1.5rem;
+        }
+
+        .juego-info h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--color-destacado);
+        }
+
+        .juego-info p {
+            color: var(--color-texto-secundario);
+            font-size: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .juego-btn {
+            background: var(--color-destacado);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-family: var(--fuente-principal);
+            width: 100%;
+            transition: all 0.3s ease;
+            font-size: 1.1rem;
+        }
+
+        .juego-btn:hover {
+            background: #ff2e4f;
+        }
+
+        /* BOTÓN PARA VOLVER A TEMÁTICAS */
+        .back-button {
+            background: var(--color-accento);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-family: var(--fuente-principal);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .back-button:hover {
+            background: var(--color-destacado);
+        }
+
+        /* BOTÓN DEL ROBOTITO PARA ABRIR EL CHATBOT */
+        .chatbot-toggle {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 70px;
+            height: 70px;
+            background: var(--color-destacado);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(233, 69, 96, 0.4);
+            z-index: 999;
+            transition: all 0.3s ease;
+        }
+
+        .chatbot-toggle:hover {
+            transform: scale(1.1);
+        }
+
+        .robot-icon {
+            font-size: 2rem;
+        }
+
+        /* ESTILOS DEL CHATBOT SIMULADO */
+        .chatbot-container {
+            background: var(--color-secundario);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            position: fixed;
+            bottom: 6rem;
+            right: 2rem;
+            width: 350px;
+            height: 450px;
+            display: none;
+            flex-direction: column;
+            z-index: 1000;
+            border: 2px solid var(--color-destacado);
+        }
+
+        .chatbot-container.active {
+            display: flex;
+        }
+
+        .chatbot-header {
+            background: var(--color-accento);
+            padding: 1rem;
+            text-align: center;
+            font-family: var(--fuente-principal);
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .chatbot-messages {
+            height: 300px;
+            padding: 1rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            flex: 1;
+        }
+
+        .message {
+            padding: 0.75rem 1rem;
+            border-radius: 18px;
+            max-width: 80%;
+            position: relative;
+        }
+
+        .bot-message {
+            background: var(--color-accento);
+            align-self: flex-start;
+            border-bottom-left-radius: 4px;
+        }
+
+        .user-message {
+            background: var(--color-destacado);
+            align-self: flex-end;
+            border-bottom-right-radius: 4px;
+        }
+
+        .chatbot-input {
+            display: flex;
+            padding: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .chatbot-input input {
+            flex: 1;
+            padding: 0.75rem;
+            border: none;
+            border-radius: 4px;
+            background: var(--color-primario);
+            color: var(--color-texto);
+            font-family: var(--fuente-secundaria);
+        }
+
+        .chatbot-input button {
+            background: var(--color-destacado);
+            color: white;
+            border: none;
+            padding: 0 1.5rem;
+            margin-left: 0.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-family: var(--fuente-principal);
+        }
+
+        /* ESTILOS DE LA SECCIÓN CONTACTO */
+        .contact-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            margin-top: 2rem;
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+        }
+
+        .team-member {
+            background: var(--color-secundario);
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .team-member:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .member-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: var(--color-accento);
+            margin: 0 auto 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            color: var(--color-destacado);
+            border: 3px solid var(--color-destacado);
+        }
+
+        .team-member h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--color-destacado);
+        }
+
+        .team-member p {
+            color: var(--color-texto-secundario);
+            font-size: 1rem;
+        }
+
+        .contact-form {
+            background: var(--color-secundario);
+            padding: 2.5rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .contact-form h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            color: var(--color-destacado);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            font-size: 1.1rem;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 1rem;
+            border: none;
+            border-radius: 6px;
+            background: var(--color-primario);
+            color: var(--color-texto);
+            font-family: var(--fuente-secundaria);
+            font-size: 1rem;
+        }
+
+        .form-group textarea {
+            height: 150px;
+            resize: vertical;
+        }
+
+        .submit-btn {
+            background: var(--color-destacado);
+            color: white;
+            border: none;
+            padding: 1rem 2.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-family: var(--fuente-principal);
+            transition: all 0.3s ease;
+            font-size: 1.1rem;
+        }
+
+        .submit-btn:hover {
+            background: #ff2e4f;
+        }
+
+        /* ESTILOS DE MODALES (INICIAR SESIÓN, CONFIGURACIÓN, ETC.) */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--color-secundario);
+            border-radius: 12px;
+            padding: 2.5rem;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            color: var(--color-texto);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .modal h2 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            color: var(--color-destacado);
+            text-align: center;
+        }
+
+        .modal-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+            gap: 1rem;
+        }
+
+        .modal-btn {
+            flex: 1;
+            padding: 1rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-family: var(--fuente-principal);
+            transition: all 0.3s ease;
+            font-size: 1.1rem;
+        }
+
+        .modal-btn.primary {
+            background: var(--color-destacado);
+            color: white;
+        }
+
+        .modal-btn.secondary {
+            background: var(--color-accento);
+            color: white;
+        }
+
+        .modal-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        /* TABLA DE PUNTUACIONES */
+        .scores-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 2rem;
+            background: var(--color-secundario);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .scores-table th,
+        .scores-table td {
+            padding: 1.2rem 1.5rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .scores-table th {
+            background: var(--color-accento);
+            font-family: var(--fuente-principal);
+            font-size: 1.1rem;
+            color: var(--color-destacado);
+        }
+
+        .scores-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .scores-table tr:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .rank-1 {
+            background: rgba(233, 69, 96, 0.1);
+        }
+
+        /* PERFIL DE USUARIO */
+        .profile-info {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .profile-avatar {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: var(--color-accento);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+            border: 4px solid var(--color-destacado);
+        }
+
+        .profile-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            width: 100%;
+        }
+
+        .stat-card {
+            background: var(--color-accento);
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--color-destacado);
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 1rem;
+            color: var(--color-texto-secundario);
+        }
+
+        /* ESTILOS RESPONSIVOS */
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 1rem;
+            }
+            
+            .hero h2 {
+                font-size: 3rem;
+            }
+            
+            .hero p {
+                font-size: 1.4rem;
+            }
+            
+            .tematicas {
+                grid-template-columns: 1fr;
+            }
+            
+            .intro-content,
+            .contact-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .team-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .chatbot-container {
+                width: 90%;
+                right: 5%;
+            }
+            
+            .profile-stats {
+                grid-template-columns: 1fr;
+            }
+            
+            .juegos-lista {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ESTILOS PARA LA SECCIÓN DE CONTACTO PERSONALIZADA */
+        .contacto {
+            max-width: 800px;
+            margin: 30px auto;
+            background-color: var(--color-secundario);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            border-left: 4px solid var(--color-destacado);
+        }
+
+        .contacto h2 {
+            text-align: center;
+            color: var(--color-destacado);
+            margin-bottom: 30px;
+            font-family: var(--fuente-principal);
+        }
+
+        .persona {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 20px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .persona:last-child {
+            border-bottom: none;
+        }
+
+        .persona img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--color-destacado);
+        }
+
+        .info h3 {
+            margin-top: 0;
+            color: var(--color-destacado);
+            font-family: var(--fuente-principal);
+            font-size: 1.4rem;
+        }
+
+        .info p {
+            margin: 5px 0;
+            color: var(--color-texto-secundario);
+            font-size: 1rem;
+        }
+
+        .instagram {
+            display: inline-block;
+            margin-top: 10px;
+            background-color: var(--color-destacado);
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 6px;
+            font-family: var(--fuente-secundaria);
+            transition: all 0.3s ease;
+        }
+
+        .instagram:hover {
+            background-color: #ff2e4f;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <!-- ENCABEZADO CON MENÚ DE NAVEGACIÓN -->
+    <header>
+        <div class="header-container">
+            <div class="logo">
+                <div class="logo-icon"></div>
+                <h1>Kids Informatic Games</h1>
+            </div>
+            
+            <nav>
+                <ul>
+                    <li><a href="#" class="nav-link active" data-section="inicio">INICIO</a></li>
+                    <li><a href="#" class="nav-link" data-section="introduccion">INTRODUCCIÓN</a></li>
+                    <li><a href="#" class="nav-link" data-section="juegos">JUEGOS</a></li>
+                    <li><a href="#" class="nav-link" data-section="contacto">CONTACTO</a></li>
+                </ul>
+            </nav>
+            
+            <!-- MENÚ DESPLEGABLE DEL USUARIO -->
+            <div class="user-menu">
+                <button class="user-btn">
+                    <span>Usuario</span>
+                    <span>▼</span>
+                </button>
+                <div class="dropdown-menu">
+                    <a href="#" data-modal="login">Iniciar Sesión</a>
+                    <a href="#" data-modal="register">Registrarse</a>
+                    <a href="#" data-modal="profile">Perfil</a>
+                    <a href="#" id="mis-juegos-link">Mis Juegos</a>
+                    <a href="#" data-section="puntuaciones" class="puntuaciones-link">Puntuaciones</a>
+                    <a href="#" data-modal="settings">Configuración</a>
+                    <a href="#" data-modal="logout">Cerrar Sesión</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- SECCIÓN INICIO - PÁGINA COMPLETA -->
+    <section id="inicio" class="section active">
+        <div class="hero">
+            <div class="hero-content">
+                <h2>KIDS INFORMATIC GAMES</h2>
+                <p>¡Bienvenidos, la aventura esta por comenzar!</p>
+                <button class="cta-button">EMPIEZA A JUGAR</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECCIÓN INTRODUCCIÓN - SOLO TEXTO -->
+    <section id="introduccion" class="section">
+        <h2>INTRODUCCIÓN</h2>
+        <div class="intro-content">
+            <div class="intro-text">
+                <h3>KIDS INFORMATIC GAMES</h3>
+                <p>ES UNA PLATAFORMA EDUCATIVA PARA NIÑOS DE 9 A 12 AÑOS, DONDE APRENDER INFORMÁTICA SE CONVIERTE EN UN JUEGO CON ACTIVIDADES COMO SOPAS DE LETRAS, CRUCIGRAMAS, PREGUNTAS Y ROMPECABEZAS, LOS NIÑOS DESCUBREN EL MUNDO DE LA TECNOLOGÍA DE FORMA DIVERTIDA, SEGURA Y FUTURISTA.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECCIÓN JUEGOS - SOLO TEMÁTICAS -->
+    <section id="juegos" class="section">
+        <h2>JUEGOS</h2>
+        <div class="tematicas">
+            <div class="tematica-card" data-tematica="hardware">
+                <div class="tematica-icon">💻</div>
+                <h3>HARDWARE</h3>
+                <p>Juegos sobre componentes físicos de computadoras</p>
+            </div>
+            <div class="tematica-card" data-tematica="software">
+                <div class="tematica-icon">📱</div>
+                <h3>SOFTWARE</h3>
+                <p>Juegos sobre programas y sistemas operativos</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- PÁGINAS INDIVIDUALES PARA CADA TEMÁTICA -->
+    
+    <!-- PÁGINA HARDWARE - CON CARRUSEL -->
+    <section id="hardware" class="section">
+        <button class="back-button" data-back="juegos">← Volver a Temáticas</button>
+        
+        <div class="tematica-header">
+            <h2>HARDWARE</h2>
+            <p>Descubre las partes físicas de una computadora a través de juegos divertidos</p>
+        </div>
+        
+        <!-- CARRUSEL DE JUEGOS ROTATORIOS -->
+        <div class="juegos-carrusel">
+            <div class="carrusel-container">
+                <!-- Las tarjetas de juegos se insertarán aquí dinámicamente -->
+            </div>
+            <div class="carrusel-controls">
+                <button class="carrusel-btn prev-btn">‹</button>
+                <button class="carrusel-btn next-btn">›</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- PÁGINA SOFTWARE - CON CARRUSEL -->
+    <section id="software" class="section">
+        <button class="back-button" data-back="juegos">← Volver a Temáticas</button>
+        
+        <div class="tematica-header">
+            <h2>SOFTWARE</h2>
+            <p>Aprende sobre programas y aplicaciones con estos juegos educativos</p>
+        </div>
+        
+        <!-- CARRUSEL DE JUEGOS ROTATORIOS -->
+        <div class="juegos-carrusel">
+            <div class="carrusel-container">
+                <!-- Las tarjetas de juegos se insertarán aquí dinámicamente -->
+            </div>
+            <div class="carrusel-controls">
+                <button class="carrusel-btn prev-btn">‹</button>
+                <button class="carrusel-btn next-btn">›</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECCIÓN PUNTUACIONES -->
+    <section id="puntuaciones" class="section">
+        <h2>PUNTUACIONES</h2>
+        <table class="scores-table">
+            <thead>
+                <tr>
+                    <th>Posición</th>
+                    <th>Jugador</th>
+                    <th>Juego</th>
+                    <th>Puntuación</th>
+                    <th>Fecha</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="rank-1">
+                    <td>1</td>
+                    <td>Ana</td>
+                    <td>Sopa de Letras - Hardware</td>
+                    <td>950</td>
+                    <td>10/05/2023</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>Carlos</td>
+                    <td>Rompecabezas - Software</td>
+                    <td>890</td>
+                    <td>09/05/2023</td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>María</td>
+                    <td>Crucigrama - Hardware</td>
+                    <td>870</td>
+                    <td>08/05/2023</td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td>Luis</td>
+                    <td>Quiz - Software</td>
+                    <td>820</td>
+                    <td>07/05/2023</td>
+                </tr>
+                <tr>
+                    <td>5</td>
+                    <td>Sofía</td>
+                    <td>Sopa de Letras - Software</td>
+                    <td>800</td>
+                    <td>06/05/2023</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- SECCIÓN CONTACTO -->
+    <section id="contacto" class="section">
+        <h2>CONTACTO</h2>
+        <div class="contacto">
+            <div class="persona">
+                <img src="anyelen.foto.jpg" alt="Anyelen Carvajal">
+                <div class="info">
+                    <h3>Anyelen Carvajal</h3>
+                    <p><strong>Correo:</strong> anyelencarvajal@gmail.com</p>
+                    <p><strong>Celular:</strong> +54 9 1141802243</p>
+                    <a href="https://www.instagram.com/_anyelen_18" target="_blank" class="instagram">Instagram</a>
+                </div>
+            </div>
+
+            <div class="persona">
+                <img src="sheila.foto.jpg" alt="Sheila Maydana">
+                <div class="info">
+                    <h3>Sheila Maydana</h3>
+                    <p><strong>Correo:</strong> sheilamaydana80@gmail.com</p>
+                    <p><strong>Celular:</strong> +54 9 1161526287</p>
+                    <a href="https://www.instagram.com/_maydanaa_227" target="_blank" class="instagram">Instagram</a>
+                </div>
+            </div>
+
+            <div class="persona">
+                <img src="araceli.jpg" alt="Aracely Dias">
+                <div class="info">
+                    <h3>Aracely Dias</h3>
+                    <p><strong>Correo:</strong> aracelidias102@gmail.com</p>
+                    <p><strong>Celular:</strong> +54 9 1148889102</p>
+                    <a href="https://www.instagram.com/ara._077" target="_blank" class="instagram">Instagram</a>
+                </div>
+            </div>
+
+            <div class="persona">
+                <img src="melody.jpg" alt="Melody Hermosilla">
+                <div class="info">
+                    <h3>Melody Hermosilla</h3>
+                    <p><strong>Correo:</strong> melodyhermosillabeltran3@gmail.com</p>
+                    <p><strong>Celular:</strong> +54 9 1150594006</p>
+                    <a href="https://www.instagram.com/melo19_0706" target="_blank" class="instagram">Instagram</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- BOTÓN DEL ROBOTITO PARA ABRIR EL CHATBOT -->
+    <div class="chatbot-toggle">
+        <div class="robot-icon">🤖</div>
+    </div>
+
+    <!-- CHATBOT SIMULADO -->
+    <div class="chatbot-container">
+        <div class="chatbot-header">
+            <div class="robot-icon">🤖</div>
+            <span>Asistente Virtual</span>
+        </div>
+        <div class="chatbot-messages">
+            <div class="message bot-message">¡Hola! Soy tu asistente virtual. ¿En qué puedo ayudarte?</div>
+        </div>
+        <div class="chatbot-input">
+            <input type="text" placeholder="Escribe tu mensaje...">
+            <button>Enviar</button>
+        </div>
+    </div>
+
+    <!-- MODALES -->
+    
+    <!-- MODAL DE INICIAR SESIÓN -->
+    <div id="login" class="modal">
+        <div class="modal-content">
+            <button class="modal-close">&times;</button>
+            <h2>INICIAR SESIÓN</h2>
+            <div class="form-group">
+                <label for="login-email">Correo Electrónico</label>
+                <input type="email" id="login-email" required>
+            </div>
+            <div class="form-group">
+                <label for="login-password">Contraseña</label>
+                <input type="password" id="login-password" required>
+            </div>
+            <div class="modal-actions">
+                <button class="modal-btn primary">Iniciar Sesión</button>
+                <button class="modal-btn secondary">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DE REGISTRO -->
+    <div id="register" class="modal">
+        <div class="modal-content">
+            <button class="modal-close">&times;</button>
+            <h2>REGISTRARSE</h2>
+            <div class="form-group">
+                <label for="register-name">Nombre Completo</label>
+                <input type="text" id="register-name" required>
+            </div>
+            <div class="form-group">
+                <label for="register-email">Correo Electrónico</label>
+                <input type="email" id="register-email" required>
+            </div>
+            <div class="form-group">
+                <label for="register-password">Contraseña</label>
+                <input type="password" id="register-password" required>
+            </div>
+            <div class="form-group">
+                <label for="register-confirm">Confirmar Contraseña</label>
+                <input type="password" id="register-confirm" required>
+            </div>
+            <div class="modal-actions">
+                <button class="modal-btn primary">Registrarse</button>
+                <button class="modal-btn secondary">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DE PERFIL -->
+    <div id="profile" class="modal">
+        <div class="modal-content">
+            <button class="modal-close">&times;</button>
+            <h2>MI PERFIL</h2>
+            <div class="profile-info">
+                <div class="profile-avatar">👤</div>
+                <h3>Usuario</h3>
+                <p>usuario@ejemplo.com</p>
+            </div>
+            <div class="profile-stats">
+                <div class="stat-card">
+                    <span class="stat-value">15</span>
+                    <span class="stat-label">Juegos Jugados</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value">3</span>
+                    <span class="stat-label">Logros</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value">720</span>
+                    <span class="stat-label">Puntos Totales</span>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button class="modal-btn primary">Editar Perfil</button>
+                <button class="modal-btn secondary">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DE CONFIGURACIÓN -->
+    <div id="settings" class="modal">
+        <div class="modal-content">
+            <button class="modal-close">&times;</button>
+            <h2>CONFIGURACIÓN</h2>
+            <div class="form-group">
+                <label for="settings-theme">Tema</label>
+                <select id="settings-theme">
+                    <option value="dark">Oscuro</option>
+                    <option value="light">Claro</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="settings-language">Idioma</label>
+                <select id="settings-language">
+                    <option value="es">Español</option>
+                    <option value="en">Inglés</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="settings-sound">Sonido</label>
+                <select id="settings-sound">
+                    <option value="on">Activado</option>
+                    <option value="off">Desactivado</option>
+                </select>
+            </div>
+            <div class="modal-actions">
+                <button class="modal-btn primary">Guardar</button>
+                <button class="modal-btn secondary">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DE CERRAR SESIÓN -->
+    <div id="logout" class="modal">
+        <div class="modal-content">
+            <button class="modal-close">&times;</button>
+            <h2>CERRAR SESIÓN</h2>
+            <p>¿Estás seguro de que quieres cerrar sesión?</p>
+            <div class="modal-actions">
+                <button class="modal-btn primary">Sí, Cerrar Sesión</button>
+                <button class="modal-btn secondary">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // DATOS DE LOS JUEGOS PARA CADA TEMÁTICA
+        const juegosPorTematica = {
+            hardware: [
+                {
+                    id: 1,
+                    nombre: "Sopa de Letras - Componentes",
+                    descripcion: "Encuentra los componentes de hardware en esta sopa de letras",
+                    icono: "🔍",
+                    tipo: "sopa-letras",
+                    enlace: "juegos hadware/sopa/sopa.html"
+                },
+                {
+                    id: 2,
+                    nombre: "Crucigrama - Partes de PC",
+                    descripcion: "Completa el crucigrama con las partes de una computadora",
+                    icono: "🧩",
+                    tipo: "crucigrama",
+                    enlace: "juegos hadware/crucigrama/crucigrama.html"
+                },
+                {
+                    id: 3,
+                    nombre: "Preguntas y respuestas - Hardware Básico",
+                    descripcion: "Responde preguntas sobre los componentes básicos de hardware",
+                    icono: "❓",
+                    tipo: "quiz",
+                    enlace: "juegos hadware/preg/index.html"
+                },
+                {
+                    id: 4,
+                    nombre: "Rompecabezas - Placa Base",
+                    descripcion: "Arma el rompecabezas de una placa base y sus componentes",
+                    icono: "🧩",
+                    tipo: "rompecabezas",
+                    enlace: "juegos hadware/rompecabezas/puzzle_ramycpu.html"
+                },
+                {
+                    id: 5,
+                    nombre: "Memoria - Periféricos",
+                    descripcion: "Encuentra las parejas de periféricos de entrada y salida",
+                    icono: "🎮",
+                    tipo: "memoria",
+                    enlace: "juegos hadware/memorama/memorama.html"
+                },
+                {
+                    id: 6,
+                    nombre: "Ahorcado - Componentes",
+                    descripcion: "Adivina los componentes de hardware antes de que se complete el ahorcado",
+                    icono: "🎯",
+                    tipo: "ahorcado",
+                    enlace: "juegos hadware/ahorcado/ahorcado.html"
+                }
+            ],
+            software: [
+                {
+                    id: 1,
+                    nombre: "Sopa de Letras - Programas",
+                    descripcion: "Encuentra nombres de programas en esta sopa de letras",
+                    icono: "🔍",
+                    tipo: "sopa-letras",
+                    enlace: "juegos software/softsopa/softsopa.html"
+                },
+                {
+                    id: 2,
+                    nombre: "Crucigrama - Sistemas Operativos",
+                    descripcion: "Completa el crucigrama sobre sistemas operativos",
+                    icono: "🧩",
+                    tipo: "crucigrama",
+                    enlace: "juegos software/softcrucigrama/softcrucigrama.html"
+                },
+                {
+                    id: 3,
+                    nombre: "Quiz - Software Aplicativo",
+                    descripcion: "Responde preguntas sobre diferentes tipos de software",
+                    icono: "❓",
+                    tipo: "quiz",
+                    enlace: "juegos software/pregsoft/preguntasyrespuestas_software.html"
+                },
+                {
+                    id: 4,
+                    nombre: "Rompecabezas - Interfaz Gráfica",
+                    descripcion: "Arma el rompecabezas de una interfaz gráfica de usuario",
+                    icono: "🧩",
+                    tipo: "rompecabezas",
+                    enlace: "juegos software/rompsoft/puzzle_software.html"
+                },
+                {
+                    id: 5,
+                    nombre: "Memoria - Iconos de Programas",
+                    descripcion: "Encuentra las parejas de iconos de programas famosos",
+                    icono: "🎮",
+                    tipo: "memoria",
+                    enlace: "juegos software/softmemorama/softmemorama.html"
+                },
+                {
+                    id: 6,
+                    nombre: "Ahorcado - Programas",
+                    descripcion: "Adivina los nombres de programas antes de que se complete el ahorcado",
+                    icono: "🎯",
+                    tipo: "ahorcado",
+                    enlace: "juegos software/softahorcado/softahorcado.html"
+                }
+            ]
+        };
+
+        // VARIABLES GLOBALES
+        let currentTematica = null;
+        let currentCarruselIndex = 0;
+
+        // FUNCIONES DE NAVEGACIÓN
+        document.addEventListener('DOMContentLoaded', function() {
+            // Navegación entre secciones principales
+            const navLinks = document.querySelectorAll('.nav-link');
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetSection = this.getAttribute('data-section');
+                    
+                    // Actualizar navegación activa
+                    navLinks.forEach(l => l.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Mostrar sección objetivo
+                    showSection(targetSection);
+                });
+            });
+
+            // Navegación a temáticas desde la sección de juegos
+            const tematicaCards = document.querySelectorAll('.tematica-card');
+            tematicaCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    const tematica = this.getAttribute('data-tematica');
+                    showTematica(tematica);
+                });
+            });
+
+            // Botones para volver a la sección de juegos
+            const backButtons = document.querySelectorAll('.back-button');
+            backButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const targetSection = this.getAttribute('data-back');
+                    showSection(targetSection);
+                });
+            });
+
+            // Enlace a puntuaciones desde el menú desplegable
+            const puntuacionesLink = document.querySelector('.puntuaciones-link');
+            puntuacionesLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                showSection('puntuaciones');
+                // Cerrar menú desplegable
+                document.querySelector('.dropdown-menu').classList.remove('show');
+            });
+
+            // Enlace a mis juegos
+            const misJuegosLink = document.getElementById('mis-juegos-link');
+            misJuegosLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                alert('Funcionalidad "Mis Juegos" en desarrollo');
+                // Cerrar menú desplegable
+                document.querySelector('.dropdown-menu').classList.remove('show');
+            });
+
+            // Menú desplegable del usuario
+            const userBtn = document.querySelector('.user-btn');
+            const dropdownMenu = document.querySelector('.dropdown-menu');
+            
+            userBtn.addEventListener('click', function() {
+                dropdownMenu.classList.toggle('show');
+            });
+
+            // Cerrar menú desplegable al hacer clic fuera
+            document.addEventListener('click', function(e) {
+                if (!userBtn.contains(e.target) && !dropdownMenu.contains(e.target)) {
+                    dropdownMenu.classList.remove('show');
+                }
+            });
+
+            // Botón CTA de la página de inicio
+            const ctaButton = document.querySelector('.cta-button');
+            ctaButton.addEventListener('click', function() {
+                showSection('juegos');
+                // Actualizar navegación activa
+                navLinks.forEach(l => l.classList.remove('active'));
+                document.querySelector('[data-section="juegos"]').classList.add('active');
+            });
+
+            // Botón del chatbot
+            const chatbotToggle = document.querySelector('.chatbot-toggle');
+            const chatbotContainer = document.querySelector('.chatbot-container');
+            
+            chatbotToggle.addEventListener('click', function() {
+                chatbotContainer.classList.toggle('active');
+            });
+
+            // Funcionalidad de modales
+            const modalLinks = document.querySelectorAll('[data-modal]');
+            const modals = document.querySelectorAll('.modal');
+            const modalCloses = document.querySelectorAll('.modal-close');
+            
+            modalLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const modalId = this.getAttribute('data-modal');
+                    const modal = document.getElementById(modalId);
+                    
+                    // Cerrar menú desplegable si está abierto
+                    dropdownMenu.classList.remove('show');
+                    
+                    // Mostrar modal
+                    modal.classList.add('active');
+                });
+            });
+            
+            modalCloses.forEach(close => {
+                close.addEventListener('click', function() {
+                    const modal = this.closest('.modal');
+                    modal.classList.remove('active');
+                });
+            });
+            
+            // Cerrar modal al hacer clic fuera
+            modals.forEach(modal => {
+                modal.addEventListener('click', function(e) {
+                    if (e.target === this) {
+                        this.classList.remove('active');
+                    }
+                });
+            });
+
+            // Inicializar carruseles
+            initCarruseles();
+
+            // FUNCIONALIDAD DEL CHATBOT
+            const chatbotInput = document.querySelector('.chatbot-input input');
+            const chatbotSendBtn = document.querySelector('.chatbot-input button');
+            const chatbotMessages = document.querySelector('.chatbot-messages');
+
+            chatbotSendBtn.addEventListener('click', sendMessage);
+            chatbotInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    sendMessage();
+                }
+            });
+
+            function sendMessage() {
+                const message = chatbotInput.value.trim();
+                if (message === '') return;
+                
+                // Agregar mensaje del usuario
+                addMessage(message, 'user');
+                chatbotInput.value = '';
+                
+                // Simular respuesta del bot después de un breve delay
+                setTimeout(() => {
+                    const botResponse = generateBotResponse(message);
+                    addMessage(botResponse, 'bot');
+                }, 1000);
+            }
+
+            function addMessage(text, sender) {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `message ${sender}-message`;
+                messageDiv.textContent = text;
+                
+                chatbotMessages.appendChild(messageDiv);
+                chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+            }
+
+            function generateBotResponse(userMessage) {
+                const lowerMessage = userMessage.toLowerCase();
+                
+                if (lowerMessage.includes('hola') || lowerMessage.includes('hi')) {
+                    return '¡Hola! ¿En qué puedo ayudarte?';
+                } else if (lowerMessage.includes('juego') || lowerMessage.includes('jugar')) {
+                    return 'Puedes explorar los juegos en la sección "JUEGOS". ¡Hay muchas opciones divertidas!';
+                } else if (lowerMessage.includes('hardware')) {
+                    return 'El hardware se refiere a los componentes físicos de una computadora. ¡Prueba nuestros juegos de hardware!';
+                } else if (lowerMessage.includes('software')) {
+                    return 'El software son los programas y aplicaciones que hacen funcionar la computadora. ¡Tenemos juegos sobre esto!';
+                } else if (lowerMessage.includes('ayuda')) {
+                    return 'Puedo ayudarte a navegar por el sitio. ¿Quieres saber sobre juegos, contacto o alguna temática específica?';
+                } else if (lowerMessage.includes('ahorcado')) {
+                    return '¡El ahorcado es un juego divertido! Lo encuentras en ambas temáticas: hardware y software.';
+                } else {
+                    return '¡Interesante! Puedo ayudarte con información sobre hardware, software, o guiarte a los juegos. ¿Qué te gustaría saber?';
+                }
+            }
+        });
+
+        // FUNCIÓN PARA MOSTRAR UNA SECCIÓN
+        function showSection(sectionId) {
+            // Ocultar todas las secciones
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Mostrar la sección objetivo
+            const targetSection = document.getElementById(sectionId);
+            if (targetSection) {
+                targetSection.classList.add('active');
+                
+                // Si es una sección de temática, inicializar el carrusel
+                if (sectionId === 'hardware' || sectionId === 'software') {
+                    currentTematica = sectionId;
+                    initCarrusel(sectionId);
+                }
+            }
+        }
+
+        // FUNCIÓN PARA MOSTRAR UNA TEMÁTICA ESPECÍFICA
+        function showTematica(tematica) {
+            showSection(tematica);
+        }
+
+        // FUNCIÓN PARA INICIALIZAR LOS CARRUSELES
+        function initCarruseles() {
+            // Inicializar carrusel para hardware
+            initCarrusel('hardware');
+            
+            // Inicializar carrusel para software
+            initCarrusel('software');
+        }
+
+        // FUNCIÓN PARA INICIALIZAR UN CARRUSEL ESPECÍFICO
+        function initCarrusel(tematica) {
+            const carruselContainer = document.querySelector(`#${tematica} .carrusel-container`);
+            const juegos = juegosPorTematica[tematica];
+            
+            if (!carruselContainer || !juegos) return;
+            
+            // Limpiar el contenedor
+            carruselContainer.innerHTML = '';
+            
+            // Crear las tarjetas de juegos
+            juegos.forEach((juego, index) => {
+                const juegoCard = document.createElement('div');
+                juegoCard.className = 'carrusel-juego';
+                juegoCard.setAttribute('data-index', index);
+                
+                juegoCard.innerHTML = `
+                    <div class="juego-icon">${juego.icono}</div>
+                    <h3>${juego.nombre}</h3>
+                    <p>${juego.descripcion}</p>
+                    <a href="${juego.enlace}" class="juego-btn">JUGAR</a>
+                `;
+                
+                carruselContainer.appendChild(juegoCard);
+            });
+            
+            // Configurar controles del carrusel
+            const prevBtn = document.querySelector(`#${tematica} .prev-btn`);
+            const nextBtn = document.querySelector(`#${tematica} .next-btn`);
+            
+            if (prevBtn && nextBtn) {
+                // Remover event listeners anteriores si existen
+                prevBtn.replaceWith(prevBtn.cloneNode(true));
+                nextBtn.replaceWith(nextBtn.cloneNode(true));
+                
+                // Obtener los nuevos botones
+                const newPrevBtn = document.querySelector(`#${tematica} .prev-btn`);
+                const newNextBtn = document.querySelector(`#${tematica} .next-btn`);
+                
+                newPrevBtn.addEventListener('click', () => navigateCarrusel(tematica, -1));
+                newNextBtn.addEventListener('click', () => navigateCarrusel(tematica, 1));
+            }
+            
+            // Inicializar posición del carrusel
+            currentCarruselIndex = 0;
+            updateCarrusel(tematica);
+        }
+
+        // FUNCIÓN PARA NAVEGAR EL CARRUSEL
+        function navigateCarrusel(tematica, direction) {
+            const juegos = juegosPorTematica[tematica];
+            if (!juegos) return;
+            
+            currentCarruselIndex += direction;
+            
+            // Asegurar que el índice esté dentro de los límites
+            if (currentCarruselIndex < 0) {
+                currentCarruselIndex = juegos.length - 1;
+            } else if (currentCarruselIndex >= juegos.length) {
+                currentCarruselIndex = 0;
+            }
+            
+            updateCarrusel(tematica);
+        }
+
+        // FUNCIÓN PARA ACTUALIZAR LA VISUALIZACIÓN DEL CARRUSEL
+        function updateCarrusel(tematica) {
+            const carruselJuegos = document.querySelectorAll(`#${tematica} .carrusel-juego`);
+            const totalJuegos = carruselJuegos.length;
+            
+            if (totalJuegos === 0) return;
+            
+            carruselJuegos.forEach((juego, index) => {
+                // Remover todas las clases
+                juego.classList.remove('active', 'prev', 'next', 'hidden');
+                
+                // Calcular la posición relativa al índice actual
+                let position = index - currentCarruselIndex;
+                
+                // Ajustar para el bucle circular
+                if (position < -Math.floor(totalJuegos / 2)) {
+                    position += totalJuegos;
+                } else if (position > Math.floor(totalJuegos / 2)) {
+                    position -= totalJuegos;
+                }
+                
+                // Aplicar clases según la posición
+                if (position === 0) {
+                    juego.classList.add('active');
+                } else if (position === -1 || (position === totalJuegos - 1 && totalJuegos > 2)) {
+                    juego.classList.add('prev');
+                } else if (position === 1 || (position === -totalJuegos + 1 && totalJuegos > 2)) {
+                    juego.classList.add('next');
+                } else {
+                    juego.classList.add('hidden');
+                }
+            });
+        }
+
+        // FUNCIÓN PARA INICIAR UN JUEGO
+        function iniciarJuego(tematica, juegoId) {            
+            const juegos = juegosPorTematica[tematica];
+            const juego = juegos.find(j => j.id == juegoId);
+            
+            if (juego && juego.enlace) {
+                // Redirigir al archivo HTML del juego
+                window.location.href = juego.enlace;
+            } else {
+                alert(`Juego no disponible: ${juego.nombre}`);
+            }
+        }
+    </script>
+</body>
+</html>

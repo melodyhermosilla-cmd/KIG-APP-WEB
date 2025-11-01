@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+// src/App.js - VERSIÓN CORREGIDA
+import React, { useState } from 'react';
 import './App.css';
 import Header from './components/Header';
 import Home from './pages/Home';
@@ -12,37 +13,12 @@ import Chatbot from './components/Chatbot';
 import Perfil from './pages/Perfil';
 import MisJuegos from './pages/MisJuegos';
 import Configuracion from './pages/Configuracion';
-import Login from './components/Login'; // ✅ Nuevo import
+import ScoreListener from './components/ScoreListener'; // ✅ CORREGIDO
 
 function App() {
   const [currentSection, setCurrentSection] = useState('inicio');
   const [currentTematica, setCurrentTematica] = useState(null);
-  const [usuario, setUsuario] = useState(null); // ✅ Nuevo estado para usuario
-  const [mostrarLogin, setMostrarLogin] = useState(false); // ✅ Nuevo estado para modal
 
-  // ✅ Verificar si hay usuario al cargar
-  useEffect(() => {
-    const usuarioGuardado = localStorage.getItem('usuario');
-    if (usuarioGuardado) {
-      setUsuario(JSON.parse(usuarioGuardado));
-    }
-  }, []);
-
-  // ✅ Función para manejar login exitoso
-  const handleLoginSuccess = (usuarioData) => {
-    setUsuario(usuarioData);
-    setMostrarLogin(false);
-  };
-
-  // ✅ Función para cerrar sesión
-  const handleLogout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('usuario');
-    setUsuario(null);
-    alert('¡Hasta pronto! 👋');
-  };
-
-  // ✅ Tu función renderSection existente (SIN MODIFICAR)
   const renderSection = () => {
     switch (currentSection) {
       case 'inicio':
@@ -70,7 +46,7 @@ function App() {
     }
   };
 
-  // ✅ Tu useEffect existente (SIN MODIFICAR)
+  // Si se selecciona una temática desde Juegos, cambiar a esa sección
   React.useEffect(() => {
     if (currentTematica) {
       setCurrentSection(currentTematica);
@@ -80,30 +56,15 @@ function App() {
 
   return (
     <div className="App">
-      {/* ✅ Header modificado para mostrar info de usuario */}
       <Header 
         currentSection={currentSection} 
-        onSectionChange={setCurrentSection}
-        usuario={usuario} // ✅ Pasar usuario al Header
-        onLoginClick={() => setMostrarLogin(true)} // ✅ Función para abrir login
-        onLogoutClick={handleLogout} // ✅ Función para cerrar sesión
+        onSectionChange={setCurrentSection} 
       />
-      
       <main>
         {renderSection()}
       </main>
-      
       <Chatbot />
-      
-      {/* ✅ Modal de Login (solo se muestra cuando es necesario) */}
-      {mostrarLogin && (
-        <div className="modal-overlay">
-          <Login 
-            onLoginSuccess={handleLoginSuccess}
-            onClose={() => setMostrarLogin(false)}
-          />
-        </div>
-      )}
+      <ScoreListener /> {/* ✅ COMPONENTE NUEVO - SIN ERRORES */}
     </div>
   );
 }
